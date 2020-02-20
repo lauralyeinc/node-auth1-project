@@ -1,10 +1,10 @@
 const router = require('express').Router();
 
-// const authRouter = require('../auth/authRouter.js');
+const authRouter = require('../auth/authRouter.js');
 const userRouter = require('../users/usersRouter.js');
 
 // /api/auth 
-// router.use('/auth', authRouter);
+router.use('/auth', authRouter);
 
 // /api/users
 router.use('/users', userRouter);

@@ -2,14 +2,14 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
 const authorize = require('./authMiddleWare.js');
-const Users = require('../users/usersHelper.js');
+const usersDB = require('../users/usersHelper.js');
 
 router.post('/register', (req, res) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 8);
     user.password = hash;
 
-    Users.add(user)
+    usersDB.add(user)
         .then(saved => {
             res.status(201).json(saved);
         })
@@ -28,7 +28,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     let {username, password } = req.body;
 
-    Users.findBy({ username })
+    usersDB.findBy({ username })
         .first()
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
