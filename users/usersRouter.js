@@ -1,5 +1,5 @@
 const express = require('express');
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const usersDB = require('./usersHelper'); 
 
 const restricted = require('./userMiddleWare')
@@ -22,6 +22,21 @@ router.get('/user', restricted, (req, res) => {
             res.send({message: 'You shall not pass', error});
         });
 });
+
+router.post('/register', (req, res) => {
+    let user = req.body;
+    const hash = bcrypt.hashSync(user.password, 8);
+    user.password = hash;
+
+    usersDB.add(user)
+        .then(saved => {
+            res.status(201).json(saved);
+        })
+        .catch(error => {
+            res.status(500).json(error);
+        });
+});
+
 
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
