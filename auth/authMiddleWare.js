@@ -3,7 +3,7 @@ const users = require('../users/usersHelper.js');
 const bcrypt = require('bcryptjs');
 
 module.exports = (req, res, next) => {
-    const { username, password } = req.headers
+    const { username, password } = req.headers;
 
     if (!(username && password)) {
         res.status(401).json({ message: 'Invaild Credentials '});
