@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
-const authorize = require('./authMiddleWare.js');
 const usersDB = require('../users/usersHelper.js');
 
 router.post('/register', (req, res) => {
@@ -17,11 +16,6 @@ router.post('/register', (req, res) => {
             res.status(500).json(error);
         });
 });
-
-// router.post('/login', authorize(), (req, res) => {
-//     let { username } = req.headers; 
-//     res.status(200).json({message: `Welcome ${username}!`});
-// })
 
 
 // without authorize() MIDDLEWARE 
@@ -40,6 +34,22 @@ router.post('/login', (req, res) => {
         .catch(error => {
             res.status(500).json(error);
         });
+});
+
+// sessions and cookies 
+// /api/auth/logout
+router.post('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destory(error => {
+            if (error) {
+                res.send('Can checkout anytime but you cannot leave')
+            } else {
+                res.send('so long, thanks for coming!')
+            }
+        })
+    } else {
+        res.end();
+    }
 });
 
 

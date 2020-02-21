@@ -19,10 +19,12 @@ router.get('/user', restricted, (req, res) => {
         })
         .catch(error => {
             console.log(error);
-            res.send({message: 'You shall not pass', error});
+            res.status(401).json({message: 'You shall not pass', error});
         });
 });
 
+
+// /api/auth/register 
 router.post('/register', (req, res) => {
     let user = req.body;
     const hash = bcrypt.hashSync(user.password, 8);
@@ -38,6 +40,7 @@ router.post('/register', (req, res) => {
 });
 
 
+// /api/auth/login
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
     
@@ -60,32 +63,5 @@ router.post('/login', (req, res) => {
       });
   });
 
-
-//middleware 
-
-// function restricted(req, res, next) {
-//     const { username, password } = req.headers;
-
-//     // console.log(username, password); 
-
-//     if (username && password) {
-//         usersDB.findBy({ username })
-//         .first()
-//         .then(user => {
-//             if (user && bcrypt.compareSync(password, user.password)) {
-//                 console.log('Success!');
-//             next();
-//             } else {
-//             res.status(401).json({ message: 'Invalid Credentials' });
-//             }
-//         })
-//         .catch(error => {
-//             console.log(error);
-//             res.status(500).json({ message: 'Unexpected error' });
-//         });
-//     } else {
-//         res.status(400).json({ message: 'No credentials provided' });
-//     }
-// };
 
 module.exports = router; 
