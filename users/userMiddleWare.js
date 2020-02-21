@@ -5,7 +5,7 @@ const usersDB = require('./usersHelper');
 module.exports = function restricted(req, res, next) {
     const { username, password } = req.headers;
 
-    // console.log(username, password); 
+    console.log(username, password); 
 
     if(username && password) {
         usersDB.findBy({ username })

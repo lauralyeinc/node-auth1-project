@@ -10,6 +10,7 @@ const router = express.Router();
 all the users contained in the database. If the user is not logged in respond with
 the correct status code and the message: 'You shall not pass!'. */
 
+// /api/user/users
 // without middleware √√  double yes      // with middleware 
 router.get('/user', restricted, (req, res) => {
     console.log('here')
@@ -24,11 +25,15 @@ router.get('/user', restricted, (req, res) => {
 });
 
 
-// /api/auth/register 
+// /api/users/register 
 router.post('/register', (req, res) => {
     let user = req.body;
-    const hash = bcrypt.hashSync(user.password, 8);
+    console.log(user);
+    // console.log(password);
+    const hash = bcrypt.hashSync(user.password, 10);
+    console.log(hash);
     user.password = hash;
+    console.log("after user.password = hash", hash)
 
     usersDB.add(user)
         .then(saved => {
@@ -40,7 +45,7 @@ router.post('/register', (req, res) => {
 });
 
 
-// /api/auth/login
+// /api/users/login
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
     
@@ -62,6 +67,23 @@ router.post('/login', (req, res) => {
         res.status(500).json(error);
       });
   });
+
+
+// sessions and cookies 
+// /api/users/logout
+router.post('/logout', (req, res) => {
+  if (req.session) {
+      req.session.destory(error => {
+          if (error) {
+              res.send('Can checkout anytime but you cannot leave')
+          } else {
+              res.send('so long, thanks for coming!')
+          }
+      })
+  } else {
+      res.end();
+  }
+});
 
 
 module.exports = router; 
